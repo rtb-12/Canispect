@@ -4,8 +4,22 @@
       "type": "pull",
       "id": "w36hm-eqaaa-aaaal-qr76a-cai"
     },
+    "audit_registry": {
+      "candid": "src/audit_registry/audit_registry.did",
+      "package": "audit_registry",
+      "type": "custom",
+      "shrink": true,
+      "gzip": true,
+      "wasm": "target/wasm32-unknown-unknown/release/audit_registry.wasm",
+      "build": ["bash ./scripts/generate-candid.sh audit_registry"],
+      "metadata": [
+        {
+          "name": "candid:service"
+        }
+      ]
+    },
     "backend": {
-      "dependencies": ["llm"],
+      "dependencies": ["llm", "audit_registry"],
       "candid": "src/backend/backend.did",
       "package": "backend",
       "type": "custom",
@@ -20,7 +34,7 @@
       ]
     },
     "frontend": {
-      "dependencies": ["backend"],
+      "dependencies": ["backend", "audit_registry"],
       "type": "assets",
       "source": ["src/frontend/dist/"]
     }

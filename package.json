@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "generate-candid": "bash ./scripts/generate-candid.sh",
+    "generate-test-wasm": "node scripts/generate-test-wasm.js",
+    "quick-wasm": "node scripts/quick-wasm-gen.js",
     "lint": "prettier --check . && cargo clippy --target wasm32-unknown-unknown",
     "format": "prettier --write . && cargo fmt && cargo clippy --fix --allow-dirty --allow-staged --target wasm32-unknown-unknown",
     "build": "npm run build --workspace=frontend",

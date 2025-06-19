@@ -1,21 +1,27 @@
-# 🧪🔥 Ultimate IC Vibe Coding Template
+# 🛡️ Canispect — AI-Powered Canister Auditor for ICP �️ Canispect — AI‑Powered Canister Auditor for ICP
 
-This template was built for the **IC Vibe Coding Bootcamp (Rust Edition)** and it's meant to be used in Advance Challenge or in a future Hackathon.
+**Canispect** is a developer-first auditing platform for canisters on Internet Computer (ICP). It combines static analysis, AI-powered reasoning, and on-chain certification to transparently assess security, performance, and correctness.
 
-## Welcome! 👋
+## 🧠 Project Overview
 
-This repository offers a high-quality, production-ready template to jumpstart your Internet Computer (ICP) development.
+Canispect is designed to fill a critical need in the ICP ecosystem by providing automated, transparent canister audits that merge AI assistance with formal analysis methods.
 
-It includes:
+**Core Features:**
 
-- 🦀 **Rust-based Canister** backend
-- ⚛️ **React + Tailwind + Typescript** frontend
-- 🤖 **IC LLM Canister** integration for Agentic workflows
-- 🧪 **Full Test Suite**: Vitest + PocketIC for backend and frontend
-- 🔁 **CI/CD** with GitHub Actions for automated tests and code quality
-- 🤖 **Copilot Integration** to auto-generate tests, code, and changelogs
+- 🔍 **AI-Powered WASM Analysis** - Upload and analyze canister WASM files with AI interpretation
+- 🤖 **Security-Focused AI Assistant** - LLM trained on canister security patterns and vulnerabilities
+- 📋 **On-Chain Audit Registry** - Immutable audit records with Internet Identity authentication
+- 🛡️ **Mock Static Analysis Tools** - Simulated integration with tools like Owi and SeeWasm
+- ⚛️ **Modern React UI** - Clean interface for audit workflows and history
+- 🔐 **Internet Identity Integration** - Secure authentication and audit signing
 
-Whether you're building full-stack dapps or agents, this template gives you a solid foundation to start fast and scale smoothly. 🚀
+**Architecture:**
+
+```
+WASM Upload → AI Analysis Engine → Audit Registry → Frontend Dashboard
+     ↓              ↓                   ↓              ↓
+Static Tools → AI Assistant → Certified Data → Internet Identity
+```
 
 ![Template Screenshot](.github/assets/template-screenshot.png)
 
