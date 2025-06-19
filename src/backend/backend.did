@@ -1,3 +1,15 @@
+type AiAnalysisResult = record {
+  identified_patterns : vec text;
+  recommendations : vec text;
+  summary : text;
+  confidence_score : float32;
+  security_concerns : vec text;
+};
+type AnalysisMetadata = record {
+  name : opt text;
+  description : opt text;
+  version : opt text;
+};
 type AssistantMessage = record {
   content : opt text;
   tool_calls : vec ToolCall;
@@ -8,12 +20,46 @@ type ChatMessage = variant {
   assistant : AssistantMessage;
   system : record { content : text };
 };
+type CodeMetrics = record {
+  function_count : nat32;
+  complexity_score : nat32;
+  estimated_lines_of_code : nat32;
+  file_size_bytes : nat32;
+};
 type FunctionCall = record { name : text; arguments : vec ToolCallArgument };
+type SecurityAnalysisResult = record {
+  recommendations : vec text;
+  overall_severity : SecuritySeverity;
+  static_analysis : StaticAnalysisResult;
+  analysis_timestamp : nat64;
+  ai_analysis : AiAnalysisResult;
+  wasm_hash : text;
+};
+type SecuritySeverity = variant { Low; High; Info; Medium; Critical };
+type StaticAnalysisResult = record {
+  vulnerabilities_found : vec StaticFinding;
+  metrics : CodeMetrics;
+  tools_used : vec text;
+};
+type StaticFinding = record {
+  tool : text;
+  message : text;
+  category : text;
+  severity : SecuritySeverity;
+  location : opt text;
+};
 type ToolCall = record { id : text; function : FunctionCall };
 type ToolCallArgument = record { value : text; name : text };
+type WasmAnalysisRequest = record {
+  metadata : opt AnalysisMetadata;
+  canister_id : opt principal;
+  wasm_bytes : blob;
+};
 service : {
+  analyze_wasm_security : (WasmAnalysisRequest) -> (SecurityAnalysisResult);
   chat : (vec ChatMessage) -> (text);
   get_count : () -> (nat64) query;
+  get_security_recommendations : (text) -> (text);
   greet : (text) -> (text) query;
   increment : () -> (nat64);
   prompt : (text) -> (text);
