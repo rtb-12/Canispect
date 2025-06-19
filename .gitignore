@@ -12,6 +12,10 @@
 # generated files
 **/declarations/
 
+# test files (not tracked)
+test-data/
+scripts/test-wasm-*.wasm
+
 # rust
 target/
 
