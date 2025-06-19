@@ -10,6 +10,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@dfinity/auth-client": "^2.4.1",
+    "@dfinity/identity": "^2.4.1",
+    "@dfinity/principal": "^2.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
