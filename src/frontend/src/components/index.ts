@@ -5,3 +5,7 @@ export * from "./ErrorDisplay";
 export * from "./InputField";
 export * from "./Loader";
 export * from "./TextArea";
+export * from "./AuthButton";
+export * from "./WasmUpload";
+export * from "./AnalysisResults";
+export * from "./AuditHistory";
