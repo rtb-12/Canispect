@@ -22,9 +22,6 @@ WASM Upload → AI Analysis Engine → Audit Registry → Frontend Dashboard
      ↓              ↓                   ↓              ↓
 Static Tools → AI Assistant → Certified Data → Internet Identity
 ```
-
-![Template Screenshot](.github/assets/template-screenshot.png)
-
 ---
 
 ## 📜 Table of Contents
