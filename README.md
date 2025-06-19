@@ -1,4 +1,4 @@
-# 🛡️ Canispect — AI-Powered Canister Auditor for ICP �️ Canispect — AI‑Powered Canister Auditor for ICP
+# 🛡️ Canispect — AI-Powered Canister Auditor for ICP
 
 **Canispect** is a developer-first auditing platform for canisters on Internet Computer (ICP). It combines static analysis, AI-powered reasoning, and on-chain certification to transparently assess security, performance, and correctness.
 
@@ -29,280 +29,342 @@ Static Tools → AI Assistant → Certified Data → Internet Identity
 
 ## 📜 Table of Contents
 
-- [🎥 Recording](#-recording)
 - [🚀 Getting Started](#-getting-started)
+- [🔍 Using Canispect](#-using-canispect)
 - [📁 Project Structure](#-project-structure)
-- [✅ Testing Patterns](#-testing-patterns)
-- [🔄 CI/CD Workflow](#-cicd-workflow)
-- [🧠 GitHub Copilot Integration](#-github-copilot-integration)
-- [🔗 Resources & Documentation](#-learning-resources)
-- [📩 Submit Your Project!](#-submit-your-project)
-
----
-
-## 🎥 Recording
-
-There was an Advanced Challenge Lab session, that was recorded and had a lot of information and showcase of Vibe Coding using this template.
-
-You can see here the full recording: https://www.youtube.com/watch?v=ZuNUy13wmlI
+- [🧪 Testing](#-testing)
+- [🛠️ Development](#-development)
+- [🚀 Deployment](#-deployment)
+- [🔗 Resources](#-resources)
 
 ---
 
 ## 🚀 Getting Started
 
-### 🧑‍💻 1. Get Codespace Ready
+### Prerequisites
 
-A **devcontainer** is preconfigured for you to start coding instantly!
+- **Node.js** (v18 or later)
+- **Rust** (latest stable)
+- **dfx** (DFINITY SDK)
+- **Internet Identity** for authentication
 
-- Click on "Use this Template" → "Create a new repository".
+### 🧑‍💻 1. Setup Development Environment
+
+#### Option A: GitHub Codespaces (Recommended)
+
+- Click "Use this Template" → "Create a new repository"
 - Click "Code → Open with Codespaces"
-- Change machine type to 4-core 16GB RAM • 32GB
-- Once the codespace is created, you can open it in VS Code Local
-- Everything is pre-installed and ready for you to run the following commands
+- Select machine type: 4-core 16GB RAM • 32GB
+- Everything is pre-configured and ready!
 
-### 2. Install Dependencies
+#### Option B: Local Development
 
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd Canispect
+
+# Install dependencies
 npm install
 ```
 
-### 3. Running Ollama
+### 2. Configure AI Analysis (Optional)
 
-To be able to test the agent locally, you'll need a server for processing the agent's prompts. For that, we'll use `ollama`, which is a tool that can download and serve LLMs.
-See the documentation on the [Ollama website](https://ollama.com/). Run:
+For enhanced AI-powered analysis, set up Ollama:
 
 ```bash
+# Start Ollama server
 ollama serve
 # Expected to start listening on port 11434
-```
 
-The above command will start the Ollama server, so that it can process requests by the agent. Additionally, and in a separate window, run the following command to download the LLM that will be used by the agent:
-
-```bash
+# In a separate terminal, download the LLM model
 ollama run llama3.1:8b
+# Type /bye to exit after model is downloaded
 ```
 
-Once the command executes and the model is loaded, you can terminate it by typing /bye. You won't need to do this step again.
-
-### 4. Deployment
-
-Then, in one terminal window, run:
+### 3. Deploy Canisters
 
 ```bash
+# Start local Internet Computer replica
 dfx start --clean
-```
 
-Keep this tab open for reading logs.
-
-Then pull the dependency and deploy the canisters in another window:
-
-```bash
-dfx deploy # deploys the backend and frontend canisters
-```
-
-```bash
+# In another terminal, deploy dependencies
 dfx deps pull
-dfx deps deploy  # deploys the llm canister
+dfx deps deploy  # Deploys the LLM canister
+
+# Deploy Canispect canisters
+dfx deploy
 ```
 
-### 5. Start the Development Server
-
-You can start the frontend development server with:
+### 4. Start Development Server
 
 ```bash
-# Just the frontend development server
+# Start the frontend development server
 npm start
-
 ```
 
-### 6. Run Tests
+Visit `http://localhost:5173` to access Canispect!
+
+---
+
+## 🔍 Using Canispect
+
+### 1. Authentication
+
+- Click **"Connect with Internet Identity"** to authenticate
+- Your Internet Identity will be used to sign audit records
+
+### 2. Analyze WASM Files
+
+#### Upload and Analyze
+
+1. Navigate to the **"Analyze WASM"** tab
+2. **Drag & drop** a `.wasm` file or click to browse
+3. Fill in **metadata** (optional):
+   - Canister name and description
+   - Version information
+   - Canister ID (if analyzing deployed canister)
+4. Click **"Analyze Security"**
+
+#### Analysis Results
+
+Canispect provides comprehensive analysis including:
+
+- **📊 Static Analysis**: Mock integration with tools like Owi and SeeWasm
+- **🤖 AI Analysis**: AI-powered security assessment and recommendations
+- **⚠️ Security Findings**: Categorized vulnerabilities with severity levels
+- **📈 Code Metrics**: File size, complexity, and estimated lines of code
+- **✅ Recommendations**: Actionable security improvements
+
+### 3. View Audit History
+
+- Navigate to **"Audit History"** tab
+- View past audits and their results
+- Filter by severity and status
+- Access detailed audit records
+
+### 4. Generate Test WASM Files
+
+For testing purposes, use the built-in generators:
 
 ```bash
-npm test
+# Generate all test WASM files
+npm run generate-test-wasm
+
+# Generate specific type
+npm run quick-wasm minimal
+npm run quick-wasm suspicious
 ```
 
-You can also run:
+Test files are created in `/test-data/` and include:
 
-```bash
-npm test tests/src/backend.test.ts    # individual test
-```
+- **minimal.wasm**: Basic WASM validation
+- **simple.wasm**: Function analysis testing
+- **complex.wasm**: Multi-function analysis
+- **suspicious.wasm**: Security vulnerability detection
 
 ---
 
 ## 📁 Project Structure
 
 ```
-ICP-Bootcamp-Vibe-Coding/
-├── .devcontainer/devcontainer.json       # Container config for running your own codespace
-├── .github/instructions/                 # Copilot general and language specific instructions
-├── .github/prompts/                      # Copilot Prompts, like add feature and changes review
-├── .github/workflows/                    # GitHub CI/CD pipelines
+Canispect/
+├── .devcontainer/devcontainer.json       # Development container configuration
+├── .github/instructions/                 # AI assistant instructions for development
 ├── src/
-│   ├── backend/                          # Rust backend canister
+│   ├── backend/                          # Rust backend canister for WASM analysis
 │   │   ├── src/
-│   │   │   └── lib.rs                    # Main Rust file
+│   │   │   └── lib.rs                    # AI-powered analysis engine
+│   │   ├── backend.did                   # Candid interface definition
 │   │   └── Cargo.toml                    # Rust dependencies
-│   ├── frontend/                         # React + Tailwind + TypeScript frontend
+│   ├── audit_registry/                   # Rust canister for audit record storage
 │   │   ├── src/
-│   │   │   ├── App.tsx                   # Main App component
-│   │   │   ├── index.css                 # Global styles with Tailwind
-│   │   │   ├── components/               # Reusable UI components
+│   │   │   └── lib.rs                    # On-chain audit registry
+│   │   ├── audit_registry.did            # Candid interface definition
+│   │   └── Cargo.toml                    # Rust dependencies
+│   ├── frontend/                         # React + Tailwind frontend
+│   │   ├── src/
+│   │   │   ├── App.tsx                   # Main Canispect application
+│   │   │   ├── components/               # UI components
+│   │   │   │   ├── WasmUpload.tsx        # File upload component
+│   │   │   │   ├── AnalysisResults.tsx   # Results display
+│   │   │   │   ├── AuditHistory.tsx      # Audit history viewer
+│   │   │   │   └── AuthButton.tsx        # Internet Identity auth
 │   │   │   ├── services/                 # Canister service layers
+│   │   │   │   ├── auth.ts               # Authentication service
+│   │   │   │   ├── audit.ts              # Audit operations
+│   │   │   │   └── canispect.ts          # Main service
 │   │   │   └── views/                    # Page-level components
-│   │   ├── assets/                       # Static assets (images, icons)
-│   │   ├── tests/                        # Frontend unit tests
-│   │   ├── index.html                    # Frontend entry point
-│   │   ├── main.tsx                      # React main file
 │   │   ├── package.json                  # Frontend dependencies
-│   │   ├── tsconfig.json                 # TypeScript configuration
-│   │   ├── vite.config.ts                # Vite build configuration
-│   │   └── vite-env.d.ts                 # Vite type definitions
+│   │   └── vite.config.ts                # Vite build configuration
 │   └── declarations/                     # Auto-generated canister interfaces
+├── scripts/
+│   ├── generate-test-wasm.js             # WASM test file generator
+│   ├── quick-wasm-gen.js                 # Quick WASM generator CLI
+│   └── generate-candid.sh                # Candid generation script
+├── test-data/                            # Generated test WASM files (not tracked)
 ├── tests/
 │   ├── src/                              # Backend test files
-│   ├── backend-test-setup.ts             # PocketIC instance
-│   └── vitest.config.ts                  # Vitest configuration
-├── scripts/
-│   ├── dev-container-setup.sh            # Extra set up steps for codespace
-│   └── generate-candid.sh                # Useful one way script to build, generate candid and did files
-├── dfx.json                              # ICP config
-├── Cargo.toml                            # Root Rust workspace config
-└── CHANGELOG.md
+│   └── vitest.config.ts                  # Test configuration
+├── dfx.json                              # Internet Computer configuration
+├── Cargo.toml                            # Root Rust workspace
+└── README.md                             # This file
 ```
 
 ---
 
-## 🔄 CI/CD Workflow
+## 🧪 Testing
 
-Located under `.github/workflows/`, this includes:
+### Run All Tests
 
-- 🧪 Automated end-2-end test runs
-
-It could be extended to:
-
-- check for security updates (audit);
-- test coverage;
-- code quality.
-
----
-
-## 🧠 **GitHub Copilot Integration**
-
-This project leverages two key customization folders:
-
-- `.github/instructions/` – Provides essential context to guide AI responses.
-- `.github/prompts/` – Defines workflow prompts to effectively assist you.
-
-Think of the AI as a super-fast junior developer, handling the heavy lifting while you focus on quality control. Instead of using PRs, you’re reviewing and refining code directly in the IDE through Copilot chat.
-
-### 📝 **About Instructions**
-
-Instructions provide "context" that applies to specific files using regex patterns defined in `applyTo`. They are ideal for project-wide or language-specific guidance.
-
-**Current Instructions:**
-
-- **general:** `applyTo: **`
-- **rust:** `applyTo: */*.rs`
-- **test:** `applyTo: tests/**`
-
-**Examples of Context You Can Define:**
-
-- This is an ICP project using Rust canisters.
-- For Rust, we follow Clippy and Rust FMT style guides and linting tools.
-- For tests, we use **Pocket IC** and maintain a specific test structure.
-
-### 🛠️ **About Prompts**
-
-Prompts define specific tasks and guide the AI through a structured workflow. They are especially useful for maintaining a consistent development process.
-
----
-
-#### ✨ **Add Feature Prompt**
-
-```markdown
-/add-feature Add a function to decrease the counter value
+```bash
+npm test
 ```
 
-In this workflow, Copilot follows a Spec Driven Workflow:
+### Backend Tests
 
-1. Clarification Phase:
-   • Updates the changelog and asks for any necessary clarifications.
-2. Test First Approach:
-   • Generates a test case and ensures it fails, confirming that the test is effectively targeting the desired behavior.
-3. Human Confirmation:
-   • The AI pauses for a human to review and confirm the spec, ensuring alignment before proceeding.
-4. Implementation Phase:
-   • Implements the code, self-checks for errors, installs necessary libraries, lints, formats, and runs tests to confirm they pass.
-
-**✅ Key Takeaways**
-
-When you explore the prompt, please notice:
-
-- CRITICAL PAUSE POINTS
-  - Strategic pauses allow the human to verify the work in small, reviewable chunks and redirect if necessary.
-- Command Explanations
-  - The prompt can include specific commands or scripts, guiding the AI in self-checking, running scripts, or managing dependencies.
-- Task-Specific Advice
-  - The prompt is the place to add any specific guidance or notes relevant only to the particular task at hand.
-
-#### 🚧 **Changes Review Prompt**
-
-To run a review, simply call the prompt:
-
-```markdown
-/changes-review
+```bash
+npm test tests/src/backend.test.ts
 ```
 
-The AI will analyze the current git diffs, then reference other files in the repo for context. It will generate a comprehensive report for you to review before committing.
+### Frontend Tests
 
-#### ✅ **Focus Areas**
+```bash
+npm test --workspace=frontend
+```
 
-1. **Business Logic:**
+### Generate Test WASM Files
 
-   - Detects potential unwanted side effects or missing edge cases.
+```bash
+# Generate all test WASM files with metadata
+npm run generate-test-wasm
 
-2. **Code Quality:**
-
-   - Suggests improvements or refactor opportunities.
-
-3. **Security & Performance:**
-   - Identifies vulnerabilities or inefficiencies.
-
-#### 📌 **Why It Matters**
-
-- AI can handle the heavy lifting, but it's **your responsibility as the Senior** to validate the findings.
-- Double-check and ensure quality – small issues now can become big problems later. 😉
+# Generate specific WASM type
+npm run quick-wasm minimal      # Minimal WASM (8 bytes)
+npm run quick-wasm simple       # Simple function WASM
+npm run quick-wasm complex      # Multi-function WASM
+npm run quick-wasm suspicious   # WASM with security patterns
+```
 
 ---
 
-## 📚 Learning Resources
+## 🛠️ Development
 
-- [Instruction and Prompt Files](https://code.visualstudio.com/docs/copilot/copilot-customization)
-- [Agent Mode](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode)
-- [Copilot Reference](https://code.visualstudio.com/docs/copilot/reference/copilot-vscode-features)
-- [ICP Dev Docs](https://internetcomputer.org/docs)
-- [Rust CDK](https://internetcomputer.org/docs/current/developer-docs/backend/rust/)
-- [PicJS Doc](https://dfinity.github.io/pic-js/)
+### Code Quality
+
+```bash
+# Format and lint all code
+npm run format
+
+# Check TypeScript errors
+npx tsc -p src/frontend/tsconfig.json
+
+# Check Rust code
+cargo check
+```
+
+### Generate Candid Interfaces
+
+```bash
+# Regenerate Candid files after interface changes
+npm run generate-candid
+```
+
+### Development Commands
+
+```bash
+# Start local replica
+dfx start --clean
+
+# Deploy all canisters
+dfx deploy
+
+# Start frontend dev server
+npm start
+```
+
+---
+
+## 🚀 Deployment
+
+### Production Deployment
+
+1. **Configure for Mainnet**:
+
+   ```bash
+   # Set up mainnet environment
+   dfx deploy --network ic
+   ```
+
+2. **Update Frontend URLs**:
+
+   - Update canister URLs in frontend services
+   - Configure Internet Identity for production
+
+3. **Deploy Steps**:
+   ```bash
+   # Deploy to Internet Computer mainnet
+   dfx deploy --network ic --with-cycles 1000000000000
+   ```
+
+### GitHub Codespaces Deployment
+
+The project is optimized for GitHub Codespaces with:
+
+- Pre-configured development container
+- Automatic dependency installation
+- Ready-to-use development environment
+
+---
+
+## 🔗 Resources
+
+### Canispect Resources
+
+- **Test WASM Files**: Generated in `/test-data/` directory
+- **Candid Interfaces**: Available in `/src/declarations/`
+- **AI Analysis**: Powered by Ollama + Llama 3.1 8B model
+
+### Internet Computer Development
+
+- [ICP Developer Documentation](https://internetcomputer.org/docs)
+- [Rust CDK Documentation](https://internetcomputer.org/docs/current/developer-docs/backend/rust/)
+- [Internet Identity Integration](https://internetcomputer.org/docs/current/developer-docs/integrations/internet-identity/)
+
+### Security Analysis Tools
+
+- [Owi - WASM Symbolic Execution](https://github.com/OCamlPro/owi)
+- [SeeWasm - WASM Analysis](https://github.com/rustwasm/wasm-pack)
+- [WACANA - Concolic Fuzzing](https://arxiv.org/abs/2007.15510)
+
+### Development Tools
+
+- [dfx SDK Documentation](https://internetcomputer.org/docs/current/developer-docs/setup/install/)
+- [PocketIC Testing Framework](https://dfinity.github.io/pic-js/)
 - [Vitest Testing Framework](https://vitest.dev/)
+- [React + Tailwind CSS](https://tailwindcss.com/)
 
 ---
 
-### 🤝 **Contributing**
+### 🤝 Contributing
 
-We welcome contributions! If you encounter a bug, have a feature request, or want to suggest improvements, please open an issue or submit a Pull Request.
+We welcome contributions to Canispect! To contribute:
 
-We especially welcome candidates of limits you face, consider using the **Limit Candidate Form Issue** – it helps us prioritize and address the most impactful limits effectively.
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** and add tests
+4. **Run tests**: `npm test`
+5. **Format code**: `npm run format`
+6. **Commit changes**: `git commit -m 'Add amazing feature'`
+7. **Push to branch**: `git push origin feature/amazing-feature`
+8. **Open a Pull Request**
+
+### Issues and Feature Requests
+
+- Report bugs or request features via [GitHub Issues](https://github.com/rtb-12/Canispect/issues)
+- Include steps to reproduce for bugs
+- Describe the expected behavior for feature requests
 
 ---
 
-## 📩 Submit Your Project!
-
-🎯 **Completed your challenge? Submit your project here:**  
-📢 [Submission Form](TODO)
-
-📌 **Want to explore more challenges? Return to the index:**  
-🔗 [IC Vibathon Index](https://github.com/pt-icp-hub/IC-Vibathon-Index)
-
----
-
-**Now go build something fast, tested, and production-ready 🚀🦀**
+**🛡️ Secure your canisters with AI-powered analysis! 🚀**
