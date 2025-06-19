@@ -1,0 +1,66 @@
+type AuditMetadata = record {
+  lines_of_code : opt nat32;
+  file_size_bytes : nat32;
+  analysis_duration_ms : nat64;
+  tools_used : vec text;
+};
+type AuditRecord = record {
+  id : text;
+  status : AuditStatus;
+  audit_timestamp : nat64;
+  ai_summary : text;
+  metadata : AuditMetadata;
+  canister_id : opt principal;
+  auditor : principal;
+  findings : vec SecurityFinding;
+  severity : AuditSeverity;
+  wasm_hash : text;
+};
+type AuditRequest = record {
+  metadata : opt AuditMetadata;
+  canister_id : opt principal;
+  wasm_bytes : blob;
+};
+type AuditSeverity = variant { Low; High; Info; Medium; Critical };
+type AuditStatus = variant { RequiresReview; Failed; InProgress; Completed };
+type AuditSummary = record {
+  id : text;
+  status : AuditStatus;
+  audit_timestamp : nat64;
+  findings_count : nat32;
+  canister_id : opt principal;
+  auditor : principal;
+  severity : AuditSeverity;
+  wasm_hash : text;
+};
+type FindingSeverity = variant { Low; High; Medium; Critical };
+type SecurityCategory = variant {
+  AccessControl;
+  IntegerOverflow;
+  Reentrancy;
+  CycleExhaustion;
+  DataValidation;
+  Other;
+  UnauthorizedAccess;
+  MemoryLeak;
+};
+type SecurityFinding = record {
+  id : text;
+  title : text;
+  description : text;
+  category : SecurityCategory;
+  severity : FindingSeverity;
+  recommendation : text;
+  location : opt text;
+};
+service : () -> {
+  get_audit_record : (text) -> (opt AuditRecord) query;
+  get_audit_statistics : () -> (nat64, nat64, nat64, nat64) query;
+  get_audit_summary : (text) -> (opt AuditSummary) query;
+  list_audits_by_auditor : (principal) -> (vec AuditSummary) query;
+  list_audits_by_canister : (principal) -> (vec AuditSummary) query;
+  submit_audit_request : (AuditRequest) -> (text);
+  update_audit_record : (text, vec SecurityFinding, text, AuditSeverity) -> (
+      bool,
+    );
+}
