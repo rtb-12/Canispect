@@ -37,8 +37,22 @@ export const AuditHistory: React.FC = () => {
     return date.toLocaleString();
   };
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity.toLowerCase()) {
+  // Helper function to convert severity from Rust enum to string
+  const severityToString = (severity: any): string => {
+    if (typeof severity === "string") {
+      return severity.toLowerCase();
+    }
+    if (typeof severity === "object" && severity !== null) {
+      // Handle Rust enum format like { "Critical": null }
+      const key = Object.keys(severity)[0];
+      return key ? key.toLowerCase() : "unknown";
+    }
+    return "unknown";
+  };
+
+  const getSeverityColor = (severity: any) => {
+    const severityStr = severityToString(severity);
+    switch (severityStr) {
       case "low":
         return "text-green-600";
       case "medium":
@@ -213,7 +227,7 @@ export const AuditHistory: React.FC = () => {
                     <span
                       className={`font-medium ${getSeverityColor(audit.severity)}`}
                     >
-                      {audit.severity}
+                      {severityToString(audit.severity).toUpperCase()}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">

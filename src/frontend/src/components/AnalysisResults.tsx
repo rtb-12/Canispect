@@ -9,8 +9,22 @@ export function AnalysisResults({
   result,
   onSaveToRegistry,
 }: AnalysisResultsProps) {
-  const getSeverityColor = (severity: string) => {
-    switch (severity.toLowerCase()) {
+  // Helper function to convert severity from Rust enum to string
+  const severityToString = (severity: any): string => {
+    if (typeof severity === "string") {
+      return severity.toLowerCase();
+    }
+    if (typeof severity === "object" && severity !== null) {
+      // Handle Rust enum format like { "Critical": null }
+      const key = Object.keys(severity)[0];
+      return key ? key.toLowerCase() : "unknown";
+    }
+    return "unknown";
+  };
+
+  const getSeverityColor = (severity: any) => {
+    const severityStr = severityToString(severity);
+    switch (severityStr) {
       case "critical":
         return "text-red-600 bg-red-100";
       case "high":
@@ -19,13 +33,16 @@ export function AnalysisResults({
         return "text-yellow-600 bg-yellow-100";
       case "low":
         return "text-blue-600 bg-blue-100";
+      case "info":
+        return "text-gray-600 bg-gray-100";
       default:
         return "text-gray-600 bg-gray-100";
     }
   };
 
-  const getSeverityIcon = (severity: string) => {
-    switch (severity.toLowerCase()) {
+  const getSeverityIcon = (severity: any) => {
+    const severityStr = severityToString(severity);
+    switch (severityStr) {
       case "critical":
         return (
           <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -77,7 +94,7 @@ export function AnalysisResults({
           >
             {getSeverityIcon(result.overall_severity)}
             <span className="ml-2">
-              {result.overall_severity.toUpperCase()}
+              {severityToString(result.overall_severity).toUpperCase()}
             </span>
           </div>
         </div>
@@ -161,7 +178,7 @@ export function AnalysisResults({
                         <span
                           className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getSeverityColor(finding.severity)}`}
                         >
-                          {finding.severity}
+                          {severityToString(finding.severity).toUpperCase()}
                         </span>
                         <span className="text-sm font-medium text-gray-900">
                           {finding.category}
