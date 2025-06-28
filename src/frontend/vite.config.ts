@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import environment from "vite-plugin-environment";
 import dotenv from "dotenv";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath, URL } from "url";
@@ -13,6 +12,14 @@ export default defineConfig({
   build: {
     outDir: "dist/",
     emptyOutDir: true,
+  },
+  define: {
+    "import.meta.env.VITE_CANISTER_ID_BACKEND": JSON.stringify(
+      "bd3sg-teaaa-aaaaa-qaaba-cai",
+    ),
+    "import.meta.env.VITE_CANISTER_ID_AUDIT_REGISTRY": JSON.stringify(
+      "bkyz2-fmaaa-aaaaa-qaaaq-cai",
+    ),
   },
   optimizeDeps: {
     esbuildOptions: {
@@ -30,12 +37,7 @@ export default defineConfig({
     },
     allowedHosts: [],
   },
-  plugins: [
-    react(),
-    tailwindcss(),
-    environment("all", { prefix: "CANISTER_" }),
-    environment("all", { prefix: "DFX_" }),
-  ],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: [
       {
