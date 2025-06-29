@@ -3,6 +3,8 @@ import { AuthButton } from "./components/AuthButton";
 import { WasmUpload } from "./components/WasmUpload";
 import { AnalysisResults } from "./components/AnalysisResults";
 import { AuditHistory } from "./components/AuditHistory";
+import { LandingPage } from "./components/LandingPage";
+import { Dashboard } from "./views";
 import { SecurityAnalysisResult } from "./services/audit";
 import { AuthState } from "./services/auth";
 
@@ -16,6 +18,7 @@ function App() {
     useState<SecurityAnalysisResult | null>(null);
   const [error, setError] = useState<string | undefined>();
   const [activeTab, setActiveTab] = useState<"analyze" | "history">("analyze");
+  const [showLanding, setShowLanding] = useState(true);
 
   const handleAnalysisComplete = (result: SecurityAnalysisResult) => {
     setAnalysisResult(result);
@@ -47,6 +50,31 @@ function App() {
     setError(undefined);
   };
 
+  const handleStartAuditing = () => {
+    setShowLanding(false);
+  };
+
+  const handleBackToLanding = () => {
+    setShowLanding(true);
+    resetAnalysis();
+  };
+
+  // Show landing page if showLanding is true
+  if (showLanding) {
+    return (
+      <LandingPage
+        onStartAuditing={handleStartAuditing}
+        authState={authState}
+        onAuthChange={setAuthState}
+      />
+    );
+  }
+
+  // Show dashboard if authenticated and on analyze tab
+  if (authState.isAuthenticated && activeTab === "analyze") {
+    return <Dashboard />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -54,7 +82,10 @@ function App() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+              <button
+                onClick={handleBackToLanding}
+                className="flex items-center space-x-2 transition-colors hover:opacity-80"
+              >
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600">
                   <svg
                     className="h-5 w-5 text-white"
@@ -74,7 +105,7 @@ function App() {
                     AI-Powered Canister Auditor
                   </p>
                 </div>
-              </div>
+              </button>
 
               {/* Navigation */}
               <nav className="ml-8 hidden space-x-8 md:flex">
