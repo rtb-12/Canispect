@@ -379,6 +379,7 @@ dfx deps deploy  # Deploys the LLM canister
 # Deploy Canispect canisters
 dfx deploy
 ```
+
 ---
 
 ## 🔍 Using Canispect
